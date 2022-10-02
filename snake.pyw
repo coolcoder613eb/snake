@@ -13,6 +13,9 @@ def find():
         fw.write(str(score))
         fw.close()
     w.destroy()
+
+def ps(a):
+    c.postscript(colormode='color',file = 'snake.ps')
         
 
 def cut():
@@ -38,7 +41,7 @@ def makeapple():
     apple = c.create_image(cr[randint(1,20)],cr[randint(1,20)],image = aimg)
 
 def gameover():
-    showerror(title = 'Game Over!',message = 'Dontn\'t hit yourself.')
+    showerror(title = 'Game Over!',message = 'Don\'t eat your tail.')
     find()
 
 def check():
@@ -51,9 +54,13 @@ def check():
 def makescissors():
     if not paused:
         global scissor, cutthere
+        try:
+            c.delete(scissor)
+        except:
+            pass
         scissor = c.create_image(cr[randint(1,20)],cr[randint(1,20)],image = scimg)
         cutthere = True
-    w.after(randint(45000,50000),makescissors)
+    w.after(randint(90000,110000),makescissors)
 
 
 def up(f):
@@ -244,24 +251,25 @@ def endless():
     paused = False
 
     makeapple()
-    w.after(randint(20000,50000),makescissors)
+    w.after(randint(100000,150000),makescissors)
 
 
     w.bind('<p>',pause)
+    w.bind('<y>',ps)
 
     w.after(1000,move)
     
-    c.grid(column = 0,row = 5,padx = 0,pady = 0)
+    c.grid(column = 0,row = 5,padx = 20,pady = 20)
 
     fr = open('snake/score.txt','r')
     r = fr.read()
     fr.close()
 
-    hsl = Label(f,text = 'High Score: '+r,font = 'Narkisim 22',anchor = 'w',relief=RAISED)
-    hsl.grid(padx = 5, pady = 5,column=0,row=0,sticky = W)
+    hsl = Label(f,text = 'High Score: '+r,font = 'Narkisim 22',anchor = 'w',relief=RAISED,width = 15)
+    hsl.grid(padx = 40, pady = 5,column=0,row=0,sticky = W)
     
-    sl = Label(f,textvariable = scorev,font = 'Narkisim 22',anchor = 'w',relief=RAISED)
-    sl.grid(padx = 5, pady = 5,column=1,row=0,sticky = W)
+    sl = Label(f,textvariable = scorev,font = 'Narkisim 22',anchor = 'w',relief=RAISED,width = 15)
+    sl.grid(padx = 40, pady = 5,column=1,row=0,sticky = W)
 
     c.focus_force()
     w.protocol("WM_DELETE_WINDOW", find)
